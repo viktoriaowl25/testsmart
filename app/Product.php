@@ -11,6 +11,8 @@ class Product extends Model
      *
      * @var array
     */
+    
+    public $timestamps = false;
 
     protected $fillable = [
         'name', 'vendor_code', 'price'

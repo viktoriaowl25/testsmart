@@ -21,7 +21,7 @@
     <div class="mt-5 b-check col-6 bg-white p-4">
         <h2 class="b-check__title font-weight-bold mb-4">Your Check</h2>
             <div class="b-check__products">
-                <div class="b-check__product d-flex justify-content-between" v-for="productInfo in productsInfo" >
+                <div class="b-check__product d-flex justify-content-between" v-if="!is_created" v-for="productInfo in productsInfo" >
                     <div>{{ productInfo.name }}</div>
                     <div class="font-weight-bold">{{ productInfo.price }}</div>
                 </div>
@@ -72,7 +72,7 @@
                     this.numberOrder = response.data.order.id;
                     this.is_created = true;
                     this.productsToBasket = [];
-                    this.productsInfo = [];
+                    this.productsInfo = {};
                     this.totalPrice = 0;
                 })
                 .catch( (error) => {
@@ -80,14 +80,17 @@
                 });
                     
             },
-            addToBasket: function(productId){
+            addToBasket: function(productId){7
                 this.productsToBasket.push(productId);
+
                 for(var i=0; i<this.products.length;i++) {
                     if(this.products[i].id == productId) {
                         this.productsInfo[productId] = this.products[i];
                         this.totalPrice = parseInt(this.totalPrice) + parseInt(this.products[i].price);
                     }
                 }
+
+                this.is_created = false;
 
             },
             deleteToBasket: function(productId){

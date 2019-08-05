@@ -3,39 +3,39 @@
 <div class="orders-page">
     <div class="col-12 mt-4 b-order-list mb-5">
             <div class="b-order-list__item row mt-2 p-2"  v-for="order in orders">
-                <div class="co-2 my-auto">
-                    <span>{{order.id}}</span>
-                </div>
-                <div class="col-6 row">
-                    <div class="col my-auto">
-                        <span>User: {{order.user.name}}</span>
+
+                <div class="col-4 my-auto py-3 px-4 b-order-list__info">
+                    <div class="mb-3">
+                        <span class="mr-2">ID:</span><span>{{order.id}}</span>
                     </div>
-                    <div class="col my-auto">
-                        <span>Status: {{order.status.title}}</span>
+                    <div class="mb-3">
+                        <span class="mr-2">User:</span><span>{{order.user.name}}</span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="mb-3" v-bind:id="createIDStatus(order.id, 'current')">Current Status: {{order.status.title}}</div>
 
                         <div class="form-group">
-                            <select class="form-control" @change="changeStatus(order.id)">
+                            <select class="form-control" v-bind:id="createIDStatus(order.id, 'select')">
                                 <option v-bind:value="status.id" v-for="status in statuses">{{ status.title }}</option>
                             </select>
                         </div>
-                    </div>    
+                    </div>
+                    <div>
+                        <button @click="saveChange(order.id)" class="btn btn-success">Save status</button>
+                    </div>
                 </div>
-
-                <div class="col-auto row mt-3 b-order-list__products">
+                <div class="col-8 m-auto px-4">
                     <h5>Products:</h5>
                   
-                    <ul class="">
-                        <li class="b-order-list__product"  v-for="product in order.products">
-                            <span class="mr-2">{{ product.name }}</span>    
-                            <span class="font-weight-bold">{{ product.price }}</span>        
+                    <ul class="list-group">
+                        <li class="b-order-list__product list-group-item d-flex justify-content-between"  v-for="product in order.products">
+                            <div class="mr-2">{{ product.name }}</div>    
+                            <div class="font-weight-bold text-right">price: {{ product.price }}</div>        
                         </li>
-                    </ul> 
-                 
+                    </ul>
                 </div>
 
-                <div class="col my-auto text-right">
-                    <button @click="saveChange(order.id)" class="btn btn-success">Save status</button>
-                </div>
+
             </div> 
     </div>
 
@@ -61,15 +61,25 @@
         },
         methods:{
             saveChange: function(orderID){
-                axios.put('/api/orders', {'id':JSON.stringify(this.productsToBasket), 'status_id': '', 'api_token': this.user.api_token})
+                var status_id = document.getElementById('select-status-' + orderID).value;
+                axios.put('/api/orders/'+ orderID, {'id':JSON.stringify(this.productsToBasket), 'status_id': status_id, 'api_token': this.user.api_token})
                     .then( (response) => {
-     
+                        if(response.data.order) {
+                            document.getElementById('current-status-' + orderID).innerHTML = 'Current Status: ' + response.data.order.status.title;    
+                            document.getElementById('select-status-' + orderID).classList.remove("error");
+                        } else {
+                            document.getElementById('select-status-' + orderID).classList.add("error");
+                        }
+                        
                 })
                 .catch( (error) => {
                     console.log(error);
                 });
                     
             },
+            createIDStatus: function(orderID, preString) {
+                return preString + '-status-' + orderID;
+            }
         }
     }
 </script>

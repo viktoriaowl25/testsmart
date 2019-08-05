@@ -12,6 +12,8 @@ class Status extends Model
      * @var array
      */
 
+    public $timestamps = false;
+
     protected $fillable = [
         'title',
     ];

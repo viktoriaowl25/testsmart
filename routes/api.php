@@ -18,12 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/orders', 'OrderController@all')->name('orders.all');
+Route::get('/orders', 'ApiOrderController@all')->name('orders.all');
 
-Route::post('/orders', 'OrderController@store')->name('orders.store');
+Route::post('/orders', 'ApiOrderController@store')->name('orders.store');
 
-Route::get('/orders/{order}', 'OrderController@show')->name('orders.show');
+Route::get('/orders/{order}', 'ApiOrderController@show')->name('orders.show');
 
-Route::put('/orders/{order}', 'OrderController@update')->name('orders.update');
+Route::put('/orders/{order}', 'ApiOrderController@update')->name('orders.update');
 
-Route::delete('/orders/{order}', 'OrderController@destory')->name('orders.destroy');
+Route::delete('/orders/{order}', 'ApiOrderController@destory')->name('products.destroy');

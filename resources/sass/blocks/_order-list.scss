@@ -8,4 +8,12 @@
     &__product{
 
     }
+    &__info{
+        border-right: 1px solid #e1dfdf;
+        & select{
+            &.error{
+                border: 1px solid red;
+            }
+        }
+    }
 }
