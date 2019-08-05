@@ -37,6 +37,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('profile.show', Auth::user()->id) }}">Profile</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('orders.all') }}">Orders</a>
+                            </li>
                         @endauth
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/viktoriaowl25/testsmart">github</a>

@@ -42,8 +42,9 @@ class OrderUpdateStatus extends Command
         $orderId = $this->argument('order_id');
         $statusId = $this->argument('status_id');
 
-        if($orderId ||  $statusId) {
+        if(!$orderId ||  !$statusId) {
             $this->error('error! not data');
+            return;
         }
 
         $api_token = $this->secret('What is the api_token?');
@@ -52,11 +53,23 @@ class OrderUpdateStatus extends Command
             $user = User::where('api_token', $api_token)->first();
 
             if($user) {
-                $obOrder = Order::find($orderId)->first();
+                $obOrder = Order::where('id', $orderId)->first();
 
                 if($obOrder) {
-                    $obOrder->status_id = $statusId;
-                    $obOrder->save();
+                    
+                    $newStatus = $statusId; 
+                    $beforeStatus =  $obOrder->status_id;
+
+                    if( $beforeStatus == 1 && ($newStatus == 2 || $newStatus == 5) ||
+                        $beforeStatus == 2 && ($newStatus == 3 || $newStatus == 5) ||
+                        $beforeStatus == 3 && ($newStatus == 4 || $newStatus == 5)) {
+                        
+                            $obOrder->status_id = $newStatus;
+                            $obOrder->save();
+                    } else {
+                        $this->error('Do not update Status!');
+                        return;
+                    }
 
                     $this->line('Status Update for Order ' . $orderId);
                 }  

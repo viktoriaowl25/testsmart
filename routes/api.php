@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/orders', 'ApiOrderController@all')->name('orders.all');
+Route::get('/orders', 'ApiOrderController@all')->name('orders.index');
 
 Route::post('/orders', 'ApiOrderController@store')->name('orders.store');
 
